@@ -1,0 +1,791 @@
+@import url('https://fonts.googleapis.com/css2?family=Baloo+2:wght@500;600;700&family=Quicksand:wght@400;500;600;700&display=swap');
+
+/* ============================================================
+   Bubu & Dudu theme tokens
+   One palette shared by every screen: cream + soft pink +
+   powder blue + warm tan/brown accents.
+   ============================================================ */
+:root {
+  --cream: #fff7ef;
+  --cream-deep: #fdebdc;
+  --card: #fffdfa;
+
+  --pink-100: #ffe6ee;
+  --pink-200: #f9c6d8;
+  --pink-300: #f19cb9;
+  --pink-400: #e07b9e;
+
+  --blue-100: #eaf3fb;
+  --blue-200: #c6dcf1;
+  --blue-300: #9dc2e4;
+
+  --tan: #e9cba7;
+  --tan-deep: #d3a87c;
+  --brown: #8c6249;
+  --brown-soft: #ab8168;
+
+  --outline: #8c6249;
+
+  --ink: #6d4b3a;
+  --ink-soft: #9a7a68;
+
+  --shadow-soft: 0 10px 24px rgba(140, 98, 73, 0.14);
+  --shadow-lift: 0 16px 34px rgba(140, 98, 73, 0.2);
+
+  --font-display: 'Baloo 2', 'Quicksand', system-ui, sans-serif;
+  --font-body: 'Quicksand', system-ui, sans-serif;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  color: var(--ink);
+  font-family: var(--font-body);
+  background-color: var(--cream);
+  background-image:
+    radial-gradient(circle at 12% 18%, var(--pink-100) 0, transparent 42%),
+    radial-gradient(circle at 88% 12%, var(--blue-100) 0, transparent 40%),
+    radial-gradient(circle at 78% 88%, var(--pink-100) 0, transparent 45%),
+    linear-gradient(170deg, var(--cream) 0%, var(--cream-deep) 100%);
+  background-attachment: fixed;
+}
+
+/* ============================================================
+   Shared bear-ear motif
+   Half-circles that sit on top of a rounded card and share the
+   card outline, so the card reads as a little bear head.
+   ============================================================ */
+.countdown-unit::before,
+.countdown-unit::after,
+.note-text::before,
+.note-text::after,
+.note-next::before,
+.note-next::after,
+.photo-frame::before,
+.photo-frame::after {
+  content: '';
+  position: absolute;
+  background: var(--card);
+  border: 3px solid var(--outline);
+  border-bottom: none;
+  border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+}
+
+/* ============================================================
+   Countdown
+   ============================================================ */
+.countdown {
+  display: flex;
+  gap: 18px;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  padding: 0 16px;
+  box-sizing: border-box;
+  flex-wrap: wrap;
+}
+
+.countdown-unit {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-width: 104px;
+  padding: 18px 16px 14px;
+  background: var(--card);
+  border: 3px solid var(--outline);
+  border-radius: 26px;
+  box-shadow: var(--shadow-soft);
+}
+
+.countdown-unit::before,
+.countdown-unit::after {
+  width: 28px;
+  height: 23px;
+  top: -20px;
+}
+
+.countdown-unit::before { left: 22px; }
+.countdown-unit::after { right: 22px; }
+
+.countdown-number {
+  font-family: var(--font-display);
+  font-size: 3.2rem;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--brown);
+  animation: popIn 0.3s ease;
+}
+
+.countdown-label {
+  margin-top: 6px;
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--pink-400);
+}
+
+.countdown-colon {
+  font-family: var(--font-display);
+  font-size: 2.4rem;
+  font-weight: 700;
+  color: var(--pink-300);
+  transform: translateY(-6px);
+}
+
+@keyframes popIn {
+  from {
+    transform: scale(1.3);
+    opacity: 0.4;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* ============================================================
+   Envelope
+   ============================================================ */
+.envelope-screen {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  cursor: pointer;
+}
+
+.envelope {
+  position: relative;
+  width: 220px;
+  height: 140px;
+  perspective: 1200px;
+  transition: transform 0.3s ease;
+  animation: envelopeFloat 3.6s ease-in-out infinite;
+}
+
+.envelope-screen:hover .envelope {
+  transform: translateY(-6px) scale(1.03);
+}
+
+.envelope-body {
+  position: absolute;
+  inset: 0;
+  background: var(--card);
+  border: 3px solid var(--outline);
+  border-radius: 14px;
+  box-shadow: var(--shadow-soft);
+}
+
+.envelope-flap {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 70px;
+  transform-origin: top;
+  transition: transform 0.6s ease;
+}
+
+.envelope-flap-line-left,
+.envelope-flap-line-right {
+  position: absolute;
+  top: 1;
+  width: 127.5px;
+  height: 3px;
+  border-radius: 3px;
+  background: var(--outline);
+}
+
+.envelope-flap-line-left {
+  left: 2px;
+  top: 3px;
+  transform-origin: left center;
+  transform: rotate(32deg);
+}
+
+.envelope-flap-line-right {
+  right: 2px;
+  top: 3px;
+  transform-origin: right center;
+  transform: rotate(-32deg);
+}
+
+.envelope-flap-open {
+  transform: rotateX(-150deg);
+}
+
+/* Bubu & Dudu sitting in the middle of the envelope.
+   Sibling of the flap, not a child, so the flap opens out from
+   behind them and they stay put. */
+.envelope-bears {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 124px;
+  height: auto;
+  transform: translate(-50%, -46%);
+  pointer-events: none;
+  filter: drop-shadow(0 3px 5px rgba(140, 98, 73, 0.18));
+}
+
+@keyframes envelopeFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+/* ============================================================
+   Cake
+   ============================================================ */
+.cake-screen {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.cake {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.cake-candles {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  gap: 4px;
+  margin-bottom: -8px;
+  position: relative;
+  z-index: 3;
+}
+
+.cake-top {
+  position: relative;
+  width: 280px;
+  height: 100px;
+  box-sizing: border-box;
+  border: 3px solid var(--outline);
+  background-color: var(--cream);
+  background-image:
+    radial-gradient(circle, rgba(241, 156, 185, 0.5) 2.5px, transparent 3px),
+    radial-gradient(circle, rgba(157, 194, 228, 0.5) 2.5px, transparent 3px);
+  background-size: 46px 46px, 46px 46px;
+  background-position: 6px 20px, 29px 42px;
+  border-radius: 0 0 18px 18px;
+  box-shadow: inset 0 -8px 16px rgba(211, 168, 124, 0.18);
+  z-index: 2;
+}
+
+.cake-top-icing {
+  position: absolute;
+  top: -10px;
+  left: -8px;
+  right: -8px;
+  height: 24px;
+  background: var(--pink-300);
+  border-radius: 40% 40% 15% 15% / 60% 60% 20% 20%;
+}
+
+.cake-bottom {
+  position: relative;
+  width: 380px;
+  height: 130px;
+  box-sizing: border-box;
+  border: 3px solid var(--outline);
+  background-color: var(--cream);
+  background-image:
+    radial-gradient(circle, rgba(241, 156, 185, 0.45) 2.5px, transparent 3px),
+    radial-gradient(circle, rgba(233, 203, 167, 0.7) 2.5px, transparent 3px);
+  background-size: 52px 52px, 52px 52px;
+  background-position: 10px 26px, 36px 52px;
+  border-radius: 0 0 24px 24px;
+  margin-top: 0;
+  box-shadow: inset 0 -10px 20px rgba(211, 168, 124, 0.18);
+  z-index: 1;
+}
+
+.cake-bottom-band {
+  position: absolute;
+  top: -13px;
+  left: 0;
+  right: 0;
+  height: 26px;
+  background: var(--pink-300);
+  border-radius: 50%;
+}
+
+.cake-shadow {
+  width: 300px;
+  height: 22px;
+  background: rgba(140, 98, 73, 0.18);
+  border-radius: 50%;
+  margin-top: 8px;
+  filter: blur(4px);
+}
+
+.candle {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 10px;
+}
+
+.candle-stick {
+  width: 8px;
+  height: 50px;
+  border-radius: 4px;
+  background-image: repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.65) 0 3px, transparent 3px 6px);
+}
+
+.candle:nth-child(5n+1) .candle-stick { background: #f7a8bd; }
+.candle:nth-child(5n+2) .candle-stick { background: #a8c8ec; }
+.candle:nth-child(5n+3) .candle-stick { background: #f6dba0; }
+.candle:nth-child(5n+4) .candle-stick { background: #b0ddc8; }
+.candle:nth-child(5n+5) .candle-stick { background: #d9bfe8; }
+
+.candle-flame {
+  width: 10px;
+  height: 16px;
+  background: radial-gradient(circle at 50% 30%, #fff1b8 0%, #ffbe5c 45%, #ff8c42 85%);
+  border-radius: 50% 50% 50% 50% / 70% 70% 30% 30%;
+  margin-bottom: 4px;
+  box-shadow: 0 0 10px rgba(247, 168, 107, 0.6);
+  animation: flicker 0.8s ease-in-out infinite;
+}
+
+@keyframes flicker {
+  0%, 100% {
+    transform: scale(1) rotate(-2deg);
+  }
+  50% {
+    transform: scale(1.05, 0.95) rotate(2deg);
+  }
+}
+
+/* ============================================================
+   Final screen: title, note card, gallery, bear couple
+   ============================================================ */
+.final-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  padding: 40px 20px 32px;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.final-screen h1 {
+  margin: 0 0 28px;
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 7vw, 3.4rem);
+  font-weight: 700;
+  color: var(--brown);
+  text-shadow: 0 3px 0 var(--pink-100), 0 6px 14px rgba(140, 98, 73, 0.16);
+  animation: titleWobble 4s ease-in-out infinite;
+}
+
+@keyframes titleWobble {
+  0%, 100% { transform: rotate(-1.5deg); }
+  50% { transform: rotate(1.5deg); }
+}
+
+/* Note card: the <p> rendered by NoteCard is itself the card */
+.note-text {
+  position: relative;
+  min-width: 260px;
+  max-width: 460px;
+  margin: 0 auto 18px;
+  padding: 30px 30px 28px;
+  background: var(--card);
+  border: 3px solid var(--outline);
+  border-radius: 28px;
+  box-shadow: var(--shadow-soft);
+  font-size: 1.15rem;
+  font-weight: 500;
+  line-height: 1.6;
+  color: var(--ink);
+}
+
+.note-text::before,
+.note-text::after {
+  width: 38px;
+  height: 29px;
+  top: -26px;
+}
+
+.note-text::before { left: 40px; }
+.note-text::after { right: 40px; }
+
+.note-next {
+  position: relative;
+  margin-bottom: 30px;
+  padding: 12px 30px;
+  background: var(--pink-200);
+  border: 3px solid var(--outline);
+  border-radius: 999px;
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  color: var(--brown);
+  cursor: pointer;
+  box-shadow: 0 6px 0 var(--pink-300);
+  transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.2s ease;
+}
+
+.note-next::before,
+.note-next::after {
+  width: 18px;
+  height: 16px;
+  top: -13px;
+  background: var(--pink-200);
+  border-color: var(--outline);
+}
+
+.note-next::before { left: 16px; }
+.note-next::after { right: 16px; }
+
+.note-next:hover {
+  background: var(--pink-100);
+}
+
+.note-next:active {
+  transform: translateY(4px);
+  box-shadow: 0 2px 0 var(--pink-300);
+}
+
+/* Gallery */
+.gallery {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 26px;
+  max-width: 760px;
+  margin-bottom: 34px;
+}
+
+.photo-frame {
+  position: relative;
+  padding: 12px 12px 8px;
+  background: var(--card);
+  border: 3px solid var(--outline);
+  border-radius: 22px;
+  box-shadow: var(--shadow-soft);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.photo-frame::before,
+.photo-frame::after {
+  width: 26px;
+  height: 21px;
+  top: -18px;
+}
+
+.photo-frame::before { left: 20px; }
+.photo-frame::after { right: 20px; }
+
+.photo-frame:nth-child(odd) { transform: rotate(-2deg); }
+.photo-frame:nth-child(even) { transform: rotate(2deg); }
+
+.photo-frame:hover {
+  transform: rotate(0deg) translateY(-6px);
+  box-shadow: var(--shadow-lift);
+}
+
+.photo-placeholder {
+  width: 150px;
+  height: 150px;
+  border: none;
+  border-radius: 16px;
+  background:
+    radial-gradient(circle at 30% 28%, rgba(255, 255, 255, 0.7) 0, transparent 55%),
+    linear-gradient(150deg, var(--pink-100) 0%, var(--cream-deep) 55%, var(--blue-100) 100%);
+  box-shadow: inset 0 0 0 2px rgba(140, 98, 73, 0.18);
+}
+
+.photo-caption {
+  margin: 10px 0 2px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  color: var(--ink-soft);
+}
+
+/* ---- The bear couple, pure CSS shapes ----
+   Drawn in the sticker style of the originals: thick dark-brown
+   outlines, Bubu in brown fur, Dudu as a white panda with dark
+   ears and feet. Paint order matters — limbs and body first, then
+   ears, then the head last so it covers the outlines behind it. */
+.bear-duo {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  gap: 4px;
+  margin-top: auto;
+}
+
+.bear {
+  position: relative;
+  width: 150px;
+  height: 188px;
+  animation: bearBob 3s ease-in-out infinite;
+}
+
+.bear,
+.bear * {
+  box-sizing: border-box;
+}
+
+.bear-body,
+.bear-ear,
+.bear-head,
+.bear-arm,
+.bear-leg {
+  position: absolute;
+  border: 4px solid var(--bear-line);
+  border-radius: 50%;
+  background: var(--bear-fur);
+}
+
+.bear-arm {
+  top: 98px;
+  width: 40px;
+  height: 33px;
+  background: var(--bear-limb);
+}
+
+.bear-arm-left { left: 0; transform: rotate(18deg); }
+.bear-arm-right { right: 0; transform: rotate(-18deg); }
+
+.bear-leg {
+  bottom: 4px;
+  width: 38px;
+  height: 26px;
+  background: var(--bear-foot);
+}
+
+.bear-leg-left { left: 20px; transform: rotate(8deg); }
+.bear-leg-right { right: 20px; transform: rotate(-8deg); }
+
+.bear-body {
+  bottom: 14px;
+  left: 50%;
+  width: 98px;
+  height: 86px;
+  margin-left: -49px;
+  border-radius: 44% 44% 46% 46% / 38% 38% 62% 62%;
+}
+
+.bear-ear {
+  top: 0;
+  width: 46px;
+  height: 46px;
+  background: var(--bear-ear);
+}
+
+.bear-ear-left { left: 4px; }
+.bear-ear-right { right: 4px; }
+
+.bear-head {
+  top: 10px;
+  left: 50%;
+  width: 130px;
+  height: 122px;
+  margin-left: -65px;
+  /* keeps the blush from spilling past the rounded face edge */
+  overflow: hidden;
+}
+
+.bear-eye {
+  position: absolute;
+  top: 46px;
+  width: 18px;
+  height: 19px;
+  border-radius: 50%;
+  background: var(--bear-ink);
+}
+
+.bear-eye-left { left: 26px; }
+.bear-eye-right { right: 26px; }
+
+.bear-cheek {
+  position: absolute;
+  top: 68px;
+  width: 25px;
+  height: 19px;
+  border-radius: 50%;
+  background: var(--bear-blush);
+}
+
+.bear-cheek-left { left: 8px; }
+.bear-cheek-right { right: 8px; }
+
+/* Open mouth: two little arches with a tongue tucked under them */
+.bear-mouth {
+  position: absolute;
+  top: 55px;
+  left: 50%;
+  width: 28px;
+  height: 28px;
+  margin-left: -14px;
+}
+
+.bear-mouth::before,
+.bear-mouth::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  width: 15px;
+  height: 11px;
+  border: 3px solid var(--bear-ink);
+  border-bottom: none;
+  border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+}
+
+.bear-mouth::before { left: -1px; }
+.bear-mouth::after { right: -1px; }
+
+.bear-tongue {
+  position: absolute;
+  top: 7px;
+  left: 50%;
+  width: 19px;
+  height: 18px;
+  margin-left: -9.5px;
+  border: 3px solid var(--bear-ink);
+  border-radius: 45% 45% 50% 50%;
+  background: var(--bear-tongue);
+}
+
+/* Bubu (left): white panda, solid black ears and feet. */
+.bear-bubu {
+  --bear-ink: #201a16;
+  --bear-line: #201a16;
+  --bear-fur: #fffdf7;
+  --bear-ear: #201a16;
+  --bear-limb: #fffdf7;
+  --bear-foot: #201a16;
+  --bear-blush: #f5a5b0;
+  --bear-tongue: #fb6f80;
+}
+
+/* Dudu (right): solid warm brown bear, no collar. */
+.bear-dudu {
+  --bear-ink: #201a16;
+  --bear-line: #4a3226;
+  --bear-fur: #bd8a63;
+  --bear-ear: #bd8a63;
+  --bear-limb: #bd8a63;
+  --bear-foot: #bd8a63;
+  --bear-blush: #f5a5b0;
+  --bear-tongue: #fb6f80;
+  animation-delay: 0.5s;
+}
+
+/* Bubu's little black chest bow */
+.bear-bubu .bear-body::before,
+.bear-bubu .bear-body::after {
+  content: '';
+  position: absolute;
+  top: 32px;
+  width: 16px;
+  height: 13px;
+  background: var(--bear-ink);
+  border-radius: 60% 40% 50% 50% / 50%;
+}
+
+.bear-bubu .bear-body::before {
+  left: 50%;
+  margin-left: -15px;
+  transform: rotate(-22deg);
+}
+
+.bear-bubu .bear-body::after {
+  left: 50%;
+  margin-left: 0;
+  transform: rotate(22deg);
+}
+
+/* Inner arms reach out toward the other bear */
+.bear-bubu .bear-arm-right {
+  right: -10px;
+  top: 94px;
+  transform: rotate(-6deg);
+}
+
+.bear-dudu .bear-arm-left {
+  left: -10px;
+  top: 94px;
+  transform: rotate(6deg);
+}
+
+@keyframes bearBob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-7px); }
+}
+
+/* Heart floating between them */
+.bear-heart {
+  position: relative;
+  width: 30px;
+  height: 30px;
+  margin-bottom: 126px;
+  background: var(--pink-300);
+  transform: rotate(-45deg);
+  border-radius: 0 0 4px 0;
+  animation: heartPulse 1.8s ease-in-out infinite;
+}
+
+.bear-heart::before,
+.bear-heart::after {
+  content: '';
+  position: absolute;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: var(--pink-300);
+}
+
+.bear-heart::before { top: -15px; left: 0; }
+.bear-heart::after { top: 0; right: -15px; }
+
+@keyframes heartPulse {
+  0%, 100% { transform: rotate(-45deg) scale(1); }
+  50% { transform: rotate(-45deg) scale(1.18); }
+}
+
+/* ============================================================
+   Motion preferences
+   ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  .envelope,
+  .final-screen h1,
+  .bear,
+  .bear-heart,
+  .candle-flame,
+  .countdown-number {
+    animation: none;
+  }
+}
+
+/* ============================================================
+   Small screens
+   ============================================================ */
+@media (max-width: 560px) {
+  .countdown { gap: 10px; }
+  .countdown-unit { min-width: 74px; padding: 14px 10px 10px; }
+  .countdown-number { font-size: 2.1rem; }
+  .countdown-colon { display: none; }
+  .cake-top { width: 220px; }
+  .cake-bottom { width: 300px; }
+  /* `scale` rather than `transform`, so bearBob keeps animating */
+  .bear { scale: 0.78; }
+  .bear-duo { gap: 0; }
+  .bear-heart { margin-bottom: 96px; }
+}

@@ -8,7 +8,7 @@ import Cake from './components/Cake'
 import Music from './components/Music'
 import DancingCats from './components/DancingCats'
 
-const BIRTHDAY = new Date('2026-09-23T22:15:00');
+const BIRTHDAY = new Date('2026-09-23T22:25:00');
 //const BIRTHDAY = new Date(Date.now() + 3000);
 
 function App() {

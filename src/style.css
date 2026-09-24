@@ -61,6 +61,8 @@ body {
 .note-text::after,
 .note-next::before,
 .note-next::after,
+.carousel-arrow::before,
+.carousel-arrow::after,
 .photo-frame::before,
 .photo-frame::after {
   content: '';
@@ -368,7 +370,7 @@ body {
 }
 
 /* ============================================================
-   Final screen: title, note card, gallery, bear couple
+   Final screen: title, note card, gallery
    ============================================================ */
 .final-screen {
   display: flex;
@@ -439,6 +441,21 @@ body {
   transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.2s ease;
 }
 
+.carousel-arrow::before,
+.carousel-arrow::after {
+  width: 13px;
+  height: 10px;
+  top: -7px;
+  background: var(--pink-200);
+  border-color: var(--outline);
+}
+
+.carousel-arrow::before { left: 12px; }
+.carousel-arrow::after { right: 12px; }
+
+.carousel-arrow:hover::before,
+.carousel-arrow:hover::after { background: var(--pink-300); }
+
 .note-next::before,
 .note-next::after {
   width: 18px;
@@ -461,17 +478,64 @@ body {
 }
 
 /* Gallery */
-.gallery {
+/* Carousel: one photo at a time, arrows either side.
+   The stage's top padding leaves room for the frame's bear ears. */
+.carousel {
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 26px;
-  max-width: 760px;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
   margin-bottom: 34px;
+}
+
+.carousel-stage {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  padding-top: 22px;
+}
+
+.carousel-arrow {
+  position: relative;
+  flex: 0 0 auto;
+  width: 46px;
+  height: 46px;
+  box-sizing: border-box;
+  padding: 0 0 4px;
+  background: var(--pink-200);
+  border: 3px solid var(--outline);
+  border-radius: 50%;
+  color: var(--brown);
+  font-family: var(--font-display);
+  font-size: 1.7rem;
+  line-height: 1;
+  cursor: pointer;
+  box-shadow: var(--shadow-soft);
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.carousel-arrow:hover {
+  background: var(--pink-300);
+  transform: translateY(-2px);
+}
+
+.carousel-arrow:active {
+  transform: translateY(0);
+}
+
+.carousel-count {
+  margin: 0;
+  font-size: 0.78rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: var(--ink-soft);
 }
 
 .photo-frame {
   position: relative;
+  flex: 0 0 auto;
+  scroll-snap-align: center;
   padding: 12px 12px 8px;
   background: var(--card);
   border: 3px solid var(--outline);
@@ -490,8 +554,7 @@ body {
 .photo-frame::before { left: 20px; }
 .photo-frame::after { right: 20px; }
 
-.photo-frame:nth-child(odd) { transform: rotate(-2deg); }
-.photo-frame:nth-child(even) { transform: rotate(2deg); }
+.photo-frame { transform: rotate(-1.5deg); }
 
 .photo-frame:hover {
   transform: rotate(0deg) translateY(-6px);
@@ -499,14 +562,32 @@ body {
 }
 
 .photo-placeholder {
-  width: 150px;
-  height: 150px;
+  width: min(280px, 58vw);
+  height: min(360px, 75vw);
   border: none;
   border-radius: 16px;
   background:
     radial-gradient(circle at 30% 28%, rgba(255, 255, 255, 0.7) 0, transparent 55%),
     linear-gradient(150deg, var(--pink-100) 0%, var(--cream-deep) 55%, var(--blue-100) 100%);
   box-shadow: inset 0 0 0 2px rgba(140, 98, 73, 0.18);
+}
+
+/* A real photo fills the same box the placeholder does */
+.photo-img {
+  display: block;
+  animation: photoFade 0.35s ease;
+  width: min(280px, 58vw);
+  height: min(360px, 75vw);
+  box-sizing: border-box;
+  object-fit: cover;
+  border: 2px solid rgba(140, 98, 73, 0.18);
+  border-radius: 16px;
+  background: var(--cream-deep);
+}
+
+@keyframes photoFade {
+  from { opacity: 0; transform: scale(0.97); }
+  to { opacity: 1; transform: scale(1); }
 }
 
 .photo-caption {
@@ -517,248 +598,51 @@ body {
   color: var(--ink-soft);
 }
 
-/* ---- The bear couple, pure CSS shapes ----
-   Drawn in the sticker style of the originals: thick dark-brown
-   outlines, Bubu in brown fur, Dudu as a white panda with dark
-   ears and feet. Paint order matters — limbs and body first, then
-   ears, then the head last so it covers the outlines behind it. */
-.bear-duo {
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-  gap: 4px;
-  margin-top: auto;
+/* Fallback button, only shown if the browser blocks autoplay */
+.music-button {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  z-index: 10;
+  padding: 10px 18px;
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--brown);
+  background: var(--pink-200);
+  border: 3px solid var(--outline);
+  border-radius: 999px;
+  box-shadow: var(--shadow-soft);
+  cursor: pointer;
+  transition: background 0.2s ease;
 }
 
-.bear {
-  position: relative;
-  width: 150px;
-  height: 188px;
-  animation: bearBob 3s ease-in-out infinite;
-}
-
-.bear,
-.bear * {
-  box-sizing: border-box;
-}
-
-.bear-body,
-.bear-ear,
-.bear-head,
-.bear-arm,
-.bear-leg {
-  position: absolute;
-  border: 4px solid var(--bear-line);
-  border-radius: 50%;
-  background: var(--bear-fur);
-}
-
-.bear-arm {
-  top: 98px;
-  width: 40px;
-  height: 33px;
-  background: var(--bear-limb);
-}
-
-.bear-arm-left { left: 0; transform: rotate(18deg); }
-.bear-arm-right { right: 0; transform: rotate(-18deg); }
-
-.bear-leg {
-  bottom: 4px;
-  width: 38px;
-  height: 26px;
-  background: var(--bear-foot);
-}
-
-.bear-leg-left { left: 20px; transform: rotate(8deg); }
-.bear-leg-right { right: 20px; transform: rotate(-8deg); }
-
-.bear-body {
-  bottom: 14px;
-  left: 50%;
-  width: 98px;
-  height: 86px;
-  margin-left: -49px;
-  border-radius: 44% 44% 46% 46% / 38% 38% 62% 62%;
-}
-
-.bear-ear {
-  top: 0;
-  width: 46px;
-  height: 46px;
-  background: var(--bear-ear);
-}
-
-.bear-ear-left { left: 4px; }
-.bear-ear-right { right: 4px; }
-
-.bear-head {
-  top: 10px;
-  left: 50%;
-  width: 130px;
-  height: 122px;
-  margin-left: -65px;
-  /* keeps the blush from spilling past the rounded face edge */
-  overflow: hidden;
-}
-
-.bear-eye {
-  position: absolute;
-  top: 46px;
-  width: 18px;
-  height: 19px;
-  border-radius: 50%;
-  background: var(--bear-ink);
-}
-
-.bear-eye-left { left: 26px; }
-.bear-eye-right { right: 26px; }
-
-.bear-cheek {
-  position: absolute;
-  top: 68px;
-  width: 25px;
-  height: 19px;
-  border-radius: 50%;
-  background: var(--bear-blush);
-}
-
-.bear-cheek-left { left: 8px; }
-.bear-cheek-right { right: 8px; }
-
-/* Open mouth: two little arches with a tongue tucked under them */
-.bear-mouth {
-  position: absolute;
-  top: 55px;
-  left: 50%;
-  width: 28px;
-  height: 28px;
-  margin-left: -14px;
-}
-
-.bear-mouth::before,
-.bear-mouth::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  width: 15px;
-  height: 11px;
-  border: 3px solid var(--bear-ink);
-  border-bottom: none;
-  border-radius: 50% 50% 0 0 / 100% 100% 0 0;
-}
-
-.bear-mouth::before { left: -1px; }
-.bear-mouth::after { right: -1px; }
-
-.bear-tongue {
-  position: absolute;
-  top: 7px;
-  left: 50%;
-  width: 19px;
-  height: 18px;
-  margin-left: -9.5px;
-  border: 3px solid var(--bear-ink);
-  border-radius: 45% 45% 50% 50%;
-  background: var(--bear-tongue);
-}
-
-/* Bubu (left): white panda, solid black ears and feet. */
-.bear-bubu {
-  --bear-ink: #201a16;
-  --bear-line: #201a16;
-  --bear-fur: #fffdf7;
-  --bear-ear: #201a16;
-  --bear-limb: #fffdf7;
-  --bear-foot: #201a16;
-  --bear-blush: #f5a5b0;
-  --bear-tongue: #fb6f80;
-}
-
-/* Dudu (right): solid warm brown bear, no collar. */
-.bear-dudu {
-  --bear-ink: #201a16;
-  --bear-line: #4a3226;
-  --bear-fur: #bd8a63;
-  --bear-ear: #bd8a63;
-  --bear-limb: #bd8a63;
-  --bear-foot: #bd8a63;
-  --bear-blush: #f5a5b0;
-  --bear-tongue: #fb6f80;
-  animation-delay: 0.5s;
-}
-
-/* Bubu's little black chest bow */
-.bear-bubu .bear-body::before,
-.bear-bubu .bear-body::after {
-  content: '';
-  position: absolute;
-  top: 32px;
-  width: 16px;
-  height: 13px;
-  background: var(--bear-ink);
-  border-radius: 60% 40% 50% 50% / 50%;
-}
-
-.bear-bubu .bear-body::before {
-  left: 50%;
-  margin-left: -15px;
-  transform: rotate(-22deg);
-}
-
-.bear-bubu .bear-body::after {
-  left: 50%;
-  margin-left: 0;
-  transform: rotate(22deg);
-}
-
-/* Inner arms reach out toward the other bear */
-.bear-bubu .bear-arm-right {
-  right: -10px;
-  top: 94px;
-  transform: rotate(-6deg);
-}
-
-.bear-dudu .bear-arm-left {
-  left: -10px;
-  top: 94px;
-  transform: rotate(6deg);
-}
-
-@keyframes bearBob {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-7px); }
-}
-
-/* Heart floating between them */
-.bear-heart {
-  position: relative;
-  width: 30px;
-  height: 30px;
-  margin-bottom: 126px;
-  background: var(--pink-300);
-  transform: rotate(-45deg);
-  border-radius: 0 0 4px 0;
-  animation: heartPulse 1.8s ease-in-out infinite;
-}
-
-.bear-heart::before,
-.bear-heart::after {
-  content: '';
-  position: absolute;
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
+.music-button:hover {
   background: var(--pink-300);
 }
 
-.bear-heart::before { top: -15px; left: 0; }
-.bear-heart::after { top: 0; right: -15px; }
-
-@keyframes heartPulse {
-  0%, 100% { transform: rotate(-45deg) scale(1); }
-  50% { transform: rotate(-45deg) scale(1.18); }
+/* Dancing cats along the bottom of the final screen. Muted so it
+   autoplays everywhere and never fights with the song. */
+.dancing-cats {
+  position: fixed;
+  bottom: 0;
+  z-index: 1;
+  /* Fill the gap beside the content: the centre column is roughly 660px
+     wide, so each side has (100vw - 660px) / 2 to play with. Sizing from
+     that keeps the cats as large as possible without ever reaching the
+     photos, at any window width. */
+  width: min(50vw - 350px, 520px);
+  height: auto;
+  /* source is portrait 608x1080; declaring it reserves the right box
+     before the video's metadata arrives, so the page does not jump */
+  aspect-ratio: 608 / 1080;
+  pointer-events: none;
 }
+
+.dancing-cats-left { left: 0; }
+
+/* mirrored so the two sides face each other */
+.dancing-cats-right { right: 0; transform: scaleX(-1); }
 
 /* ============================================================
    Motion preferences
@@ -766,8 +650,6 @@ body {
 @media (prefers-reduced-motion: reduce) {
   .envelope,
   .final-screen h1,
-  .bear,
-  .bear-heart,
   .candle-flame,
   .countdown-number {
     animation: none;
@@ -777,6 +659,11 @@ body {
 /* ============================================================
    Small screens
    ============================================================ */
+/* below this the cats would sit on top of the content */
+@media (max-width: 760px) {
+  .dancing-cats { display: none; }
+}
+
 @media (max-width: 560px) {
   .countdown { gap: 10px; }
   .countdown-unit { min-width: 74px; padding: 14px 10px 10px; }
@@ -784,8 +671,8 @@ body {
   .countdown-colon { display: none; }
   .cake-top { width: 220px; }
   .cake-bottom { width: 300px; }
-  /* `scale` rather than `transform`, so bearBob keeps animating */
-  .bear { scale: 0.78; }
-  .bear-duo { gap: 0; }
-  .bear-heart { margin-bottom: 96px; }
+  .carousel-stage { gap: 8px; }
+  .carousel-arrow { width: 40px; height: 40px; font-size: 1.4rem; }
+  /* the note card's min-width would otherwise overflow narrow phones */
+  .note-text { min-width: 0; padding: 26px 20px 24px; }
 }

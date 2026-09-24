@@ -5,8 +5,10 @@ import Envelope from './components/Envelope'
 import NoteCard from './components/NoteCard'
 import Gallery from './components/Gallery'
 import Cake from './components/Cake'
+import Music from './components/Music'
+import DancingCats from './components/DancingCats'
 
-const BIRTHDAY = new Date('2026-09-24T00:00:00');
+const BIRTHDAY = new Date('2026-09-23T22:15:00');
 //const BIRTHDAY = new Date(Date.now() + 3000);
 
 function App() {
@@ -59,12 +61,36 @@ function App() {
     )
   }
   const photos = [
-    { src: "", caption: "first date" },
-    { src: "", caption: "first valentines" }
+    { src: "/photos/firstdate.jpg", caption: "first date" },
+    { src: "/photos/firstphotobooth.jpg", caption: "first photobooth" },
+    { src: "/photos/faithandjj.jpg", caption: "faith and jj" },
+    { src: "/photos/faithandspidey.jpg", caption: "faith and spidey" },
+    { src: "/photos/gurtdate.jpg", caption: "gurt date" },
+    { src: "/photos/cactusclurb.jpg", caption: "cactus club" },
+    { src: "/photos/bruno.jpg", caption: "bruno mars" },
+    { src: "/photos/afterexams.jpg", caption: "after exams" },
+    { src: "/photos/valentines.jpg", caption: "valentines" },
+    { src: "/photos/flowersvalentines.jpg", caption: "flowers for valentines" },
+    { src: "/photos/hotpot.jpg", caption: "hotpot" },
+    { src: "/photos/climbingdate.jpg", caption: "climbing date" },
+    { src: "/photos/akaza.jpg", caption: "akaza" },
+    { src: "/photos/mybirthday.jpg", caption: "my birthday" },
+    { src: "/photos/towel.jpg", caption: "towel" },
+    { src: "/photos/ishowdovey.jpg", caption: "ishowdovey" },
+    { src: "/photos/67.jpg", caption: "67" },
+    { src: "/photos/afterexamsphotoboof.jpg", caption: "after exams photobooth" },
+    { src: "/photos/medicinewheel.jpg", caption: "medicine wheel" },
+    { src: "/photos/tteokbokkidate.jpg", caption: "tteokbokki date" },
+    { src: "/photos/firstconcerttgt.jpg", caption: "first concert together" }
   ]
   const notes = [
     "hi dovey",
-    "yo gurt"
+    "yo gurt",
+    "happy birthday again",
+    "ur 20",
+    "hope you have an amazing day",
+    "good luck at clinical tomorrow",
+    "i love you so much"
   ]
 
   return (
@@ -76,45 +102,10 @@ function App() {
         onNext={() => setNoteIndex(noteIndex + 1)}
       />
       <Gallery photos={photos}/>
-      <div className="bear-duo" aria-hidden="true">
-        <div className="bear bear-bubu">
-          <span className="bear-arm bear-arm-left"></span>
-          <span className="bear-arm bear-arm-right"></span>
-          <span className="bear-leg bear-leg-left"></span>
-          <span className="bear-leg bear-leg-right"></span>
-          <span className="bear-body"></span>
-          <span className="bear-ear bear-ear-left"></span>
-          <span className="bear-ear bear-ear-right"></span>
-          <span className="bear-head">
-            <span className="bear-eye bear-eye-left"></span>
-            <span className="bear-eye bear-eye-right"></span>
-            <span className="bear-cheek bear-cheek-left"></span>
-            <span className="bear-cheek bear-cheek-right"></span>
-            <span className="bear-mouth">
-              <span className="bear-tongue"></span>
-            </span>
-          </span>
-        </div>
-        <div className="bear-heart"></div>
-        <div className="bear bear-dudu">
-          <span className="bear-arm bear-arm-left"></span>
-          <span className="bear-arm bear-arm-right"></span>
-          <span className="bear-leg bear-leg-left"></span>
-          <span className="bear-leg bear-leg-right"></span>
-          <span className="bear-body"></span>
-          <span className="bear-ear bear-ear-left"></span>
-          <span className="bear-ear bear-ear-right"></span>
-          <span className="bear-head">
-            <span className="bear-eye bear-eye-left"></span>
-            <span className="bear-eye bear-eye-right"></span>
-            <span className="bear-cheek bear-cheek-left"></span>
-            <span className="bear-cheek bear-cheek-right"></span>
-            <span className="bear-mouth">
-              <span className="bear-tongue"></span>
-            </span>
-          </span>
-        </div>
-      </div>
+      {/* song section, in seconds */}
+      <Music src="/song.mp3" startAt={45} endAt={56} />
+      <DancingCats side="left" />
+      <DancingCats side="right" />
     </div>
   );
 }
